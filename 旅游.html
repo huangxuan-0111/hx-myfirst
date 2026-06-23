@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅游</title>
+    <style>
+        .container {
+        width: 1400px; /* 和顶部导航宽度保持一致 */
+        margin-left:1px; 
+        margin: 0 auto;
+        padding: 0 10px; /* 左右预留小幅内边距，防止贴屏幕边缘 */
+    }
+        /*设置一个父容器让图像与搜索栏在同一行*/
+        .s-head {
+          display: flex;
+          align-items: center;
+          gap: 50px;
+          padding: 10px 20px;
+        }
+        .logo-img {
+            height: 35px;
+            width: auto;
+        }
+        /*第一个搜索框容器的样式设置*/
+         .s-container {
+            display: flex;
+            align-items: center;
+            width: 400px;
+            height: 35px;
+            border: 1px solid #007bff;
+            border-radius: 10px;
+            overflow: hidden;
+         }
+         /*输入框的样式设置*/
+         .s-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-color:#007bff;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            cursor:pointer;
+         }
+         /*按钮的样式设置*/
+         .s-button {
+            background-color: #007bff;
+            height: 35px;
+            color: white;
+            border: none;
+            padding: 5px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        /* 把登录注册放在一个父容器 */
+       .top {
+            display: flex;
+             justify-content:flex-end;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 30px;
+            border-bottom: 1px solid white;
+        }
+        /* 正常状态 (导航栏字的样式）*/
+        .log {
+            font-size: 14px;
+            color: black;
+            text-decoration: none;
+            margin: 0 15px;
+            white-space: nowrap;
+        }
+        /* 悬停状态 */
+        .log:hover {
+            color:#007bff;
+        }
+        /* 下拉箭头我的订单 */
+        .dropdown {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        /* 箭头 */
+        .arrow {
+            font-size: 12px;
+        }
+        /* 做第二部分 */
+       * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: "Microsoft YaHei", sans-serif;
+        }
+        /* 头部第一行 */
+       .top-banner-row {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-end;
+          margin-left: 0;
+          gap: 0; 
+        }
+        /* 头部的图像 */
+        .banner-img {
+           flex-shrink: 0; 
+           height: 70px;
+           background: url("https://static.tripcdn.com/modules/vacation/vacationpic/online/tourpic/home/home_select_city.png") no-repeat left -5px;
+           background-size: contain;
+           width: 320px;
+         }
+                  /* 搜索条 */
+        .search-bar {
+         display: flex;
+         align-items: stretch;
+         height: 45px;
+         gap: 0;
+         flex: 1; 
+        }
+        .city-dropdown {
+         flex-shrink: 0;
+        } 
+     /* 分类下拉框外层容器 */
+        .cate-dropdown-wrap {
+        position: relative;
+        border: 3px solid #ff8822;
+        border-right: none; 
+        border-radius: 6px 0 0 6px;
+        min-width: 150px;
+       }
+       /* 分类下拉框的点击触发区域 */
+       .cate-trigger {
+        width: 100%;
+        height: 100%;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        color: #333333;
+        cursor: pointer;
+        background: #FFF7D6;
+      }
+      /* 分类菜单 */
+      .cate-menu {
+        position: absolute;
+        top: 100%;
+        left: -3px;
+        width: calc(100% + 6px);
+        border: 1px solid #ff8822;
+        border-top: none;
+        background: #fff;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s 0.3s, opacity 0.3s ease;
+        list-style: none;
+        z-index: 99;
+     }
+     /* 设置悬停样式 */
+    .cate-dropdown-wrap:hover .cate-menu {
+       visibility: visible;
+      opacity: 1;
+      transition-delay: 0s;
+    }
+/* 点击框锁定展开 */
+      #cateOpen:checked ~ .cate-menu {
+        visibility: visible;
+        opacity: 1;
+        transition-delay: 0s;
+      }
+      /* 箭头翻转 */
+      #cateOpen:checked ~ .cate-trigger .arrow {
+        transform: rotate(180deg);
+        transition: 0.3s;
+      }
+
+    /* 选中分类下拉菜单里的每一个列表选项 */
+    .cate-menu li {
+      height: 30px;
+      line-height: 30px;
+      padding: 0 20px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    /* 每个选项的悬停样式 */
+    .cate-menu li:hover {
+      background-color: #f5f5f5;
+    }
+    /* 搜索框的输入 */
+    .search-input {
+      flex: 1;
+      height: 100%;
+      width: auto;
+      padding: 0 20px;
+      font-size: 14px;
+      border: 2px solid #ff8822;
+      outline: none;
+       box-sizing: border-box;
+    }
+    /* 选中 class=search-input 的输入框里的灰色提示文字，用来修改它的样式 */
+    .search-input::placeholder {
+      color: #999;
+    }
+
+    /* 搜索按钮设置*/
+    .search-btn {
+      height: 100%;
+      width: 120px;
+      padding: 0 36px;
+      background-color: #ff8822;
+      border: 2px solid #ff8822;
+      border-radius: 0 4px 4px 0;
+      color: #fff;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .search-btn:hover {
+      background: #ff7000;
+    }
+
+      .city-dropdown {
+  position: relative;
+  width: 350px;
+}
+ /* 触发按钮样式 */
+        .city-trigger {
+      /* 横向均分三部分：图标文字左、箭头右 */
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px; /* 图标 和 文字 之间距离 */
+      
+      /* 关键：宽度由内容自适应，不会自动撑满整行 */
+      width: auto;
+      min-width: 220px; /* 最小宽度，防止太窄 */
+      max-width: 260px; /* 限制最大宽度，不会拉很长 */
+      
+      /* 上下左右内边距，控制盒子高矮宽松度 */
+      padding: 12px 24px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      cursor: pointer;
+      
+      /* 禁止文字换行 */
+      white-space: nowrap;
+    }
+    /* 下拉箭头单独推到最右侧 */
+    .city-trigger .arrow {
+      margin-left: auto;
+    }
+  /* 下拉面板默认隐藏 */
+    .city-panel {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      border: 1px solid #ccc;
+      margin-top: 4px;
+      max-height: 600px;
+      overflow-y: auto;
+      display: none;
+      z-index: 999;
+      padding: 12px;
+    }
+
+    /* 关键：复选框被勾选时，显示下拉面板 */
+    #cityOpen:checked ~ .city-panel {
+      display: block;
+    }
+
+    /* 箭头旋转 */
+    #cityOpen:checked ~ .city-trigger .arrow {
+      transform: rotate(180deg);
+      transition: 0.3s;
+    }
+    .hotcity {
+      color: #333333;
+      text-decoration: none;
+    }
+    .hotcity:hover {
+      text-decoration:underline;
+    }
+
+    /* 第三部分 */
+
+/* 左右容器强制同行，不换行 */
+ .dest-container {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* 禁止自动换行，广告永远在右边 */
+    gap: 24px;
+    width: 500px;
+    margin-top: 10px;
+    align-items: stretch;
+    }
+
+    /* 左侧固定宽度，防止挤压 */
+.dest-left {
+  width: 230px;
+  flex-shrink: 0; /* 左侧宽度固定，不会被压缩 */
+  border: 1px solid #eee;
+}
+.dest-wrap {
+   width: 320px; /* 城市盒子有多长 */
+   background: #fff;
+   border: 1px solid #eee;
+   border-radius: 6px;
+   padding: 8px; /* 缩小内边距，给文字更多横向空间 */
+   flex-shrink: 0; /* 左侧宽度锁死，不会被压缩 */
+}
+/* 左侧每一行分类 */
+.dest-item {
+  position: relative; /* 作为弹出面板定位父级 */
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+.dest-item:hover {
+  background: #f0f7ff;
+  }
+.dest-item:last-child {
+  border-bottom: none;
+}
+.dest-item h4 {
+  font-size: 18px;
+  color: black;
+  margin-bottom: 3px;
+  position: relative;
+  padding-left: 24px; /* 给方块留出左边空位 */
+}
+/* 左侧蓝色小方块 */
+.dest-item h4::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%); /* 垂直居中 */
+  width: 12px;
+  height: 12px;
+  background-color: #2478e5; /* 蓝色方块颜色，可自定义 */
+}
+.dest-word {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.4;
+  /* 新增下面两行，防止单词断开溢出 */
+  word-break: keep-all; /* 英文/地名不拆分单词 */
+  white-space: normal;
+}
+.dest-word a {
+  color: #333;       /* 初始文字灰色，可自行调整 */
+  text-decoration: none; /* 默认去掉下划线 */
+}
+
+
+/* 鼠标悬浮时：出现下划线 + 蓝色文字 */
+.dest-word a:hover {
+   text-decoration: underline;
+}
+/* 悬浮弹出右侧大面板 */
+.dest-pop {
+  position: absolute;
+  left: 102%; /* 贴在盒子右侧 */
+  top: 0;
+  width: 1100px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  display: none;
+  z-index: 999;
+}
+/* 鼠标悬浮当前分类，弹出面板 */
+.dest-item:hover .dest-pop {
+  display: block;
+}
+.dest-pop h3 {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+/* 图片行布局 */
+.img-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.img-card {
+  width: 140px;
+  text-align: center;
+}
+.img-card img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+.img-card span {
+  font-size: 14px;
+  color: #333;
+}
+.dest-pop h4 {
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+.dest-pop p {
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+
+    /* 轮播广告 */
+ /* 轮播容器 */
+ 
+    .banner {
+      width: 900px;
+      /* 跳广告盒子的大小宽度 */
+      height: 500px;
+      overflow: hidden;
+      position: relative;
+      border-radius: 0px;
+    }
+    .banner-box {
+    flex:1;
+    gap: 20px;
+     margin-left: 10px;
+     /* 广告与左边城市盒子离得多远 */
+     height: 500px;
+    }
+    /* 图片列表横向排列 */
+    .banner-wrap {
+      width: 200%;
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    /* 每张广告图 */
+    .banner-item {
+      width: 50%;
+     }
+    /* 右侧广告自适应剩余空白 */
+    .ad-banner {
+    flex: 1;
+     max-width: 920px;
+    }
+    .banner-item a {
+      display: block;
+     
+    }
+    .banner-item img {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+    }
+    /* 底部小圆点指示器 */
+    .banner-dot {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+    }
+    .dot.active {
+      background: #2478e5;
+    }
+    
+
+    /* 第四部分 */
+    /* 在bannerbox里面，在广告那个容器里 */
+     /* 四大旅游卡片容器 一行4个 */
+        .tour-card-wrap {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin-top: -220px;  
+            /* 广告上下间距 */
+            margin-bottom:0px;
+        }
+       
+        /* 单张卡片样式 
+       /* 补充卡片基础样式，保证图片正常填充 */
+        .tour-card {
+            display: block;
+            height: 300px;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        .tour-card-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+                
+        /* 底部出游提醒通栏 */
+        .travel-tips {
+            width: 100%;
+            height: 80px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            gap: 15px;
+            padding: 0 20px;
+        }
+        .tips-icon {
+            width: 60px;
+            height: 60px;
+        }
+        .tips-big {
+            font-size: 16px;
+            color: #3377ee;
+            font-weight: bold;
+        }
+        .tips-text {
+            font-size: 22px;
+            color: #333;
+        }
+
+        /* 第五部分 */
+
+        *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family: "Microsoft YaHei", sans-serif;
+        }
+        body{
+            background:#fff;
+        }
+
+        .logo{
+            font-size:25px;
+            color:#37a856;
+            font-weight:bold;
+            margin-right:40px;
+        }
+        .tab-wrap{
+            display:flex;
+            gap:35px;
+            margin-left: 60px;
+        }
+        .tab-item{
+            font-size:14px;
+            color:#333;
+            cursor:pointer;
+            padding:6px 0 4px;
+            position:relative;
+        }
+        .tab-item.active{
+            color:#000;
+        }
+        .tab-item.active::after{
+            content:"";
+            position:absolute;
+            left:50%;
+            bottom:-5px;
+            width:0;
+            height:0;
+            border-left:12px solid transparent;
+            border-right:12px solid transparent;
+            border-bottom:4px solid #37a856;
+        }
+
+            
+
+        /* 主体左右布局 */
+        .main-box{
+            display:flex;
+            gap: 10px; /* 原来默认很大，改成10~15px，数字越小挨得越近 */
+        }
+
+        /* 左侧侧边栏 */
+        .left-aside{
+            width:250px;
+            height: 500px;
+            /* 分开写属性，语法正确 */
+            background-image: url(https://dimg04.c-ctrip.com/images/0300112000av6h8km147F.jpg);
+            background-repeat: no-repeat;
+            background-position: center top; /* 图片顶部紧贴上方绿线 */
+            background-size: cover; /* 铺满不变形，不要写死500px */
+            padding:20px 20px; /* 取消负数padding，上下正常留白 */
+            position:relative;
+            overflow:hidden; /* 超出部分裁剪，不会溢出重复 */
+        }
+        .left-aside h2 {
+            font-size:34px;
+            color:#22803b;
+            margin-bottom:10px;
+        }
+        .left-aside .desc{
+            font-size:19px;
+            color:#2c8c49;
+            margin-bottom:25px;
+        }
+        .go-btn{
+            width:68px;
+            height:48px;
+            background:#29b359;
+            color:#fff;
+            border-radius:30px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:22px;
+            font-weight:bold;
+        }
+    
+        /* 右侧商品区域 */
+        .right-content{
+            flex:1;
+            padding:20px;
+        }
+        .tab-content{
+            display:none;
+        }
+        .tab-content.show{
+            display:block;
+        }
+
+        /* 导航底部整条绿色横线 */
+        .top-nav{
+            display:flex;
+            align-items:center;
+            padding:10px 20px;
+            padding-bottom:2px;
+            border-bottom:3px solid #37a856; /* 全局底部绿色长线 */
+            position:relative;
+        }
+        .goods-list{
+            display:grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap:22px;
+        }
+       .goods-card a.img-link,
+       .goods-card a:has(.card-img) {
+    text-decoration: none;
+    outline: none;
+    color: #222;
+    display: block;
+        }
+        .goods-card a.img-link:hover,
+         .goods-card a:has(.card-img):hover {
+            text-decoration: none; /* 图片hover永远不下划线 */
+        }
+
+        /* 商品卡片核心：hover黄色边框*/
+        .goods-card{
+            border:2px solid transparent;
+            padding:3px;
+            margin-left: -15px;
+            transition:border 0.2s;
+        }
+        .goods-card:hover{
+            border:2px solid #ffd300; /* 悬浮黄色外框 */
+            background-color: #f8fcf8 ;
+        }
+        .card-img{
+            width:250px;
+            height:125px;
+            object-fit:cover;
+            display:block;
+            margin-bottom:10px;
+        }
+        .card-title a{
+            text-decoration: none;
+            font-size:15px;
+            line-height:1.4;
+            color:#222;
+            margin-bottom:8px;
+        }
+        .card-title:hover{
+            text-decoration:underline;
+        }
+        .card-price{
+            font-size:16px;
+            color:#ff5400;
+            font-weight:bold;
+        }
+
+        /* 第六部分 */
+        *{
+         margin:0;
+         padding:0;
+         box-sizing:border-box;
+        font-family: "Microsoft YaHei", sans-serif;
+        }
+        body{
+            background:#fff;
+        }
+
+/* 顶部导航金色主题修改 */
+.logo2{
+    font-size:25px;
+    color:#d49800; /* 金色logo，原绿色#37a856替换 */
+    font-weight:bold;
+    margin-right:40px;
+}
+.tab-wrap2{
+    display:flex;
+    gap:35px;
+    margin-left: 60px;
+}
+.tab-item2{
+    font-size:14px;
+    color:#333;
+    cursor:pointer;
+    padding:6px 0 4px;
+    position:relative;
+}
+.tab-item2.active{
+    color:#000;
+}
+.tab-item2.active::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    transform: translateX(-50%);
+    bottom:-5px;
+    width:0;
+    height:0;
+    border-left:12px solid transparent;
+    border-right:12px solid transparent;
+    border-bottom:4px solid #f7b32b; /* 金色三角，原绿色#37a856替换 */
+}
+
+/* 主体左右布局不变 */
+.main-box2{
+    display:flex;
+    gap: 10px;
+}
+
+/* 左侧外层容器：垂直放上下两个侧边模块 */
+.left-aside2{
+    width:250px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.left-aside2{
+            width:250px;
+            height: 500px;
+            /* 分开写属性，语法正确 */
+            background-image: url(https://dimg04.c-ctrip.com/images/0302912000av6iuscC43C.jpg);
+            margin-right: 50px;
+            background-repeat: no-repeat;
+            background-position: center top; /* 图片顶部紧贴上方绿线 */
+            background-size: cover; /* 铺满不变形，不要写死500px */
+            padding:20px 20px; /* 取消负数padding，上下正常留白 */
+            position:relative;
+            overflow:hidden; /* 超出部分裁剪，不会溢出重复 */
+        }
+.aside-kid2 h2 {
+    font-size:34px;
+    color:#994400;
+    margin-bottom:10px;
+}
+.aside-kid2 .desc{
+    font-size:19px;
+    color:#b36600;
+    margin-bottom:25px;
+}
+.go-btn-kid2{
+    width:68px;
+    height:48px;
+    background:#f7941d;
+    color:#fff;
+    border-radius:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* 右侧商品区域 完全保留原代码无需修改 */
+.right-content2{
+    flex:1;
+    padding:20px;
+}
+.tab-content2{
+    display:none;
+}
+.tab-content2.show{
+    display:block;
+}
+
+/* 导航底部整条金色横线 */
+.top-nav2{
+    display:flex;
+    align-items:center;
+    padding:10px 20px;
+    padding-bottom:2px;
+    border-bottom:3px solid #f7b32b; /* 金色底线，原绿色#37a856替换 */
+    position:relative;
+}
+.goods-list2{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:22px;
+}
+
+/* 卡片统一弹性等高，和原版goods-card逻辑完全一致 */
+.goods-card {
+    border:2px solid transparent;
+    padding:3px;
+    margin-left: -15px;
+    transition:all 0.2s ease;
+    /* 核心：垂直弹性，所有卡片等高对齐 */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.goods-card:hover{
+    border:2px solid #ffd300;
+    background-color: #f8fcf8 ;
+}
+
+/* 统一所有图片 class=card-img / card-img2 共用一套样式 */
+.card-img, .card-img2{
+     width:250px;
+     height:125px;
+    object-fit:cover;
+    display:block;
+    margin-bottom:10px;
+}
+
+/* 统一标题容器，3行文字截断，防止撑高卡片 */
+.card-title, .card-title2 {
+    flex: 1;
+    font-size:15px;
+    line-height:1.4;
+    color:#222;
+    margin-bottom:8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 统一价格样式 */
+.card-price, .card-price2{
+    font-size:16px;
+    color:#ff5400;
+    font-weight:bold;
+}
+
+/* 统一处理所有卡片内a链接，消除下划线 */
+.goods-card a {
+    text-decoration: none;
+    outline: none;
+    color: #222;
+    display: block;
+}
+.goods-card a:hover {
+    text-decoration: none;
+}
+/* 仅文字hover下划线 */
+.card-title a:hover, .card-title2 a:hover{
+    text-decoration:underline;
+}
+
+
+/* 第七部分 */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Microsoft YaHei", sans-serif;
+}
+body{
+    background: #ffffff;
+    padding: 30px;
+}
+/* 标题区域 */
+.cooper-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+.cooper-title{
+    font-size: 40px;
+    color: #222;
+    font-weight: 600;
+}
+.more-link{
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+}
+/* 图标网格容器 */
+.cooper-grid{
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 16px;
+}
+/* 单个合作卡片 */
+.cooper-item{
+    border: 1px solid #eee;
+    padding: 20px 10px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+.cooper-item:hover{
+    box-shadow: 0 4px 12px #e2e2e2;
+    transform: translateY(-3px);
+}
+/* logo图片 */
+.cooper-logo{
+    width: 100%;
+    height: 120px;
+    object-fit: contain;
+    display: block;
+    margin-bottom: 14px;
+}
+/* 底部地名文字 */
+.cooper-name a {
+    font-size: 14px;
+    color: #444;
+    text-decoration: none;
+}
+.cooper-name a:hover {
+    text-decoration: underline;
+}
+/* 删掉原来.cooper-name里的color、text-decoration */
+.cooper-name{
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+    </style>
+    </head>
+<body>
+  <div class="container">
+     <div class="s-head">
+        <a href="#">
+          <img src="https://webresource.c-ctrip.com/ares2/nfes/pc-home/1.0.65/default/image/logo.png" title="携程旅行网" class="logo-img">
+        </a>
+     <span class="s-container">
+        <input type="text" class="s-input" placeholder="搜索任何旅游相关">
+        <button class="s-button">搜索</button>
+     </span>
+     <span class="top">
+        <a href="#" class="log" >登录</a>
+        <a href="#" class="log" >注册</a>
+        <a href="#" class="log dropdown" >我的订单
+            <span class="arrow">⬇</span>
+        </a>
+        <div class="log">联系客服</div>
+     </span>
+ </div>
+  <div class="top-banner-row">
+    <div class="banner-img"></div>
+
+     <!-- 下拉外层 -->
+      <div class="city-dropdown">
+        <!-- 隐藏复选框，用来记录展开/收起状态 -->
+        <input type="checkbox" id="cityOpen" hidden>
+
+        <!-- 触发器：点击label会切换checkbox选中状态 -->
+        <label class="city-trigger" for="cityOpen">
+          <span>📍 郑州站</span>
+          <span class="arrow">▼</span>
+        </label>
+
+        <!-- 下拉面板，默认隐藏，checkbox选中就显示 -->
+        <div class="city-panel">
+           <h4>热门出发城市</h4>
+           <div class="hotcity">
+           <p>
+                  <a href="#">北京</a> <a href="#">上海</a> <a href="#">天津</a> <a href="#">重庆</a> <a href="#">青岛</a>
+                  <a href="#">西安</a> <a href="#">南京</a> <a href="#">杭州</a> <a href="#">厦门</a> <a href="#">成都</a>
+                  <a href="#">深圳</a> <a href="#">广州</a> <a href="#">昆明</a><a href="#">长沙</a>
+                  <a href="#">沈阳</a>
+                  <a href="#">武汉</a>
+                </p>
+          </div>
+          <input placeholder="搜索城市">
+          <div class="city-list">
+            <div>A 澳门 阿里 安康</div>
+            <div>B 北京 保定 宝鸡</div>
+          </div>
+        </div>
+      </div>
+
+
+ <div class="search-bar">
+     <div class="cate-dropdown-wrap">
+      <input type="checkbox" id="cateOpen" hidden>
+      <label class="cate-trigger" for="cateOpen">
+        <span>全部产品</span>
+        <span class="arrow">▲</span>
+      </label>
+      <ul class="cate-menu">
+        <li>出发地参团</li>
+        <li>目的地参团</li>
+        <li>出发地自由行</li>
+        <li>目的地自由行</li>
+        <li>出发地私家团</li>
+        <li>目的地私家团</li>
+        <li>邮轮</li>
+        <li>游学</li>
+        <li>高端游</li>
+        <li>一日游</li>
+        <li>签证</li>
+      </ul>
+    </div>
+      <input class="search-input" placeholder="请输入目的地、主题或关键字" />
+      <button class="search-btn"> 搜索 </button>
+    </div>
+  </div>
+ 
+ <!-- 改产品 -->
+    <script>
+const cateOpen = document.getElementById('cateOpen');
+const titleText = document.querySelector('.cate-trigger span:first-child');
+const menuList = document.querySelectorAll('.cate-menu li');
+menuList.forEach(li => {
+  li.onclick = function() {
+    titleText.innerText = this.innerText;
+    cateOpen.checked = false;
+  }
+})
+// 改站点
+</script>
+
+
+<div class="dest-container" style="display:flex; gap:20px; align-items:flex-start;">
+  <div class="dest-wrap">
+   <!-- 左侧分类菜单 -->
+      <div class="dest-item">
+        <h4>热门推荐</h4>
+        <p class="dest-word">
+         <a href="#">青岛</a>
+         <a href="#">呼伦贝尔</a>
+         <a href="#">长白山</a>
+         <a href="#">日本</a>
+         <a href="#">九寨沟</a>
+         <a href="#">新加坡</a> 
+         <a href="#">韩国</a> 
+         <a href="#">威海</a>
+      <!-- 悬浮弹出面板 -->
+      <div class="dest-pop">
+        <h3>热门目的地</h3>
+        <div class="img-row">
+          <div class="img-card"><img alt="青岛"><span>青岛</span></div>
+          <div class="img-card"><img alt="呼伦贝尔"><span>呼伦贝尔</span></div>
+          <div class="img-card"><img alt="长白山"><span>长白山</span></div>
+          <div class="img-card"><img alt="日本"><span>日本</span></div>
+          <div class="img-card"><img alt="九寨沟"><span>九寨沟</span></div>
+          <div class="img-card"><img alt="新加坡"><span>新加坡</span></div>
+        </div>
+        <div class="img-row">
+          <div class="img-card"><img alt="韩国"><span>韩国</span></div>
+          <div class="img-card"><img alt="威海"><span>威海</span></div>
+          <div class="img-card"><img alt="烟台"><span>烟台</span></div>
+          <div class="img-card"><img alt="北京"><span>北京</span></div>
+          <div class="img-card"><img alt="重庆"><span>重庆</span></div>
+          <div class="img-card"><img alt="昆明"><span>昆明</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-item">
+      <h4>云南/贵州</h4>
+      <p class="dest-word">
+        <a href="#">云南</a>
+        <a href="#">昆明</a>
+        <a href="#">贵阳</a>
+        <a href="#">丽江</a>
+        <a href="#">大理市</a>
+        <a href="#">西双版纳</a> 
+        <a href="#">香格里拉</a> 
+        <a href="#">腾冲</a>
+       </p>
+      <div class="dest-pop">
+        <h3>热门目的地</h3>
+        <div class="img-row">
+          <div class="img-card"><img alt="贵阳"><span>贵阳</span></div>
+          <div class="img-card"><img alt="丽江"><span>丽江</span></div>
+          <div class="img-card"><img alt="乌鲁木齐"><span>乌鲁木齐</span></div>
+          <div class="img-card"><img alt="成都"><span>成都</span></div>
+          <div class="img-card"><img alt="大理市"><span>大理市</span></div>
+          <div class="img-card"><img alt="西宁"><span>西宁</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-item">
+      <h4>海南/福建</h4>
+      <p class="dest-word">
+        <a href="#">三亚</a>
+        <a href="#">厦门</a>
+        <a href="#">福州</a>
+        <a href="#">泉州</a>
+        <a href="#">三沙</a>
+        <a href="#">武夷山</a> 
+        <a href="#">海口</a> 
+        <a href="#">鼓浪屿</a>
+      </p>
+      <div class="dest-pop">
+        <h3>热门目的地</h3>
+        <div class="img-row">
+          <div class="img-card"><img alt="三亚"><span>三亚</span></div>
+          <div class="img-card"><img alt="厦门"><span>厦门</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-item">
+      <h4>东北</h4>
+      <p class="dest-word">
+        <a href="#">长白山</a>
+        <a href="#">哈尔滨</a>
+        <a href="#">延吉</a>
+        <a href="#">伊春</a>
+        <a href="#">大连</a>
+        <a href="#">漠河</a> 
+        <a href="#">沈阳</a> 
+        <a href="#">大兴安岭</a>
+    </p>
+      <div class="dest-pop">
+        <h3>热门目的地</h3>
+        <div class="img-row">
+          <div class="img-card"><img alt="哈尔滨"><span>哈尔滨</span></div>
+          <div class="img-card"><img alt="大连"><span>大连</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-item">
+      <h4>中国港澳台</h4>
+      <p class="dest-word">
+        <a href="#">香港</a>
+        <a href="#">澳门</a>
+        <a href="#">台湾</a>
+        <a href="#">台北</a>
+        <a href="#">九份</a>
+        <a href="#">苗栗</a> 
+        <a href="#">新北</a> 
+        <a href="#">台南</a>       
+    </p>
+      <div class="dest-pop">
+        <h3>热门目的地</h3>
+        <div class="img-row">
+          <div class="img-card"><img alt="香港"><span>香港</span></div>
+          <div class="img-card"><img alt="澳门"><span>澳门</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-item">
+      <h4>国内其他</h4>
+      <p class="dest-word">
+        <a href="#">青岛</a>
+        <a href="#">呼伦贝尔</a>
+        <a href="#">九寨沟</a>
+        <a href="#">威海</a>
+        <a href="#">烟台</a>
+        <a href="#">北京</a> 
+        <a href="#">重庆</a> 
+        <a href="#">乌鲁木齐</a>
+    </p>
+      <div class="dest-pop">
+        <h3>热门目的地</h3>
+      </div>
+    </div>
+    <div class="dest-item">
+      <h4>亚洲</h4>
+      <p class="dest-word">
+        <a href="#">日本</a>
+        <a href="#">新加坡</a>
+        <a href="#">韩国</a>
+        <a href="#">马来西亚</a>
+        <a href="#">泰国</a>
+        <a href="#">巴厘岛</a> 
+        <a href="#">马尔代夫</a> 
+     </p>
+      <div class="dest-pop">
+        <h3>热门目的地</h3>
+        <div class="img-row">
+          <div class="img-card"><img alt="马来西亚"><span>马来西亚</span></div>
+          <div class="img-card"><img alt="泰国"><span>泰国</span></div>
+        </div>
+        <h4>出境畅游</h4>
+        <p>日本 | 新加坡 | 韩国 | 马来西亚 | 泰国 | 香港 | 巴厘岛 | 马尔代夫</p>
+      </div>
+    </div>
+    <div class="dest-item">
+      <h4>欧洲/美洲</h4>
+      <p class="dest-word">
+        <a href="#">土耳其</a>
+        <a href="#">瑞士</a>
+        <a href="#">俄罗斯</a>
+        <a href="#">冰岛</a>
+        <a href="#">意大利</a>
+        <a href="#">英国</a> 
+        <a href="#">法国</a> 
+        <a href="#">格鲁吉亚</a>       
+    </p>
+      <div class="dest-pop">
+        <h3>热门目的地</h3>
+      </div>
+    </div>
+    <div class="dest-item">
+      <h4>非洲/大洋洲</h4>
+      <p class="dest-word">
+        <a href="#">澳大利亚</a>
+        <a href="#">埃及</a>
+        <a href="#">新西兰</a>
+        <a href="#">斐济</a>
+        <a href="#">摩洛哥</a>
+        <a href="#">肯尼亚</a> 
+        <a href="#">毛里求斯</a> 
+    </p>
+      <div class="dest-pop">
+        <h3>热门目的地</h3>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 右侧空白区域：广告轮播容器 -->
+  <div class="banner-box">
+    <!-- 自动轮播广告模块 -->
+    <div class="banner">
+      <div class="banner-wrap" id="bannerWrap">
+        <!-- 广告1，a标签点击跳转 -->
+        <div class="banner-item">
+          <a href="#">
+            <img src="https://dimg04.c-ctrip.com/images/0AM3s12000sop9r9tBE2E.jpg" alt="">
+          </a>
+        </div>
+        <!-- 广告2 -->
+        <div class="banner-item">
+          <a href="#">
+            <img src="https://dimg04.c-ctrip.com/images/0zg4p12000jbp83kc08F3.jpg" alt="">
+          </a>
+        </div>
+       
+      </div>
+      <!-- 轮播底部小圆点 -->
+      <div class="banner-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+
+    <script>
+    const wrap = document.getElementById('bannerWrap');
+    const dots = document.querySelectorAll('.dot');
+    let index = 0;
+    const total = dots.length;
+    // 每3秒自动切换一张（3000毫秒）
+    const timer = setInterval(autoPlay, 3000);
+
+    // 自动翻页函数
+    function autoPlay() {
+      index++;
+      if (index >= total) index = 0;
+      changeSlide();
+    }
+
+    // 切换图片 + 更新圆点
+    function changeSlide() {
+      wrap.style.transform = `translateX(-${index * 50}%)`;
+      dots.forEach(dot => dot.classList.remove('active'));
+      dots[index].classList.add('active');
+    }
+
+    // 点击小圆点手动切换
+    dots.forEach((dot, i) => {
+      dot.onclick = () => {
+        index = i;
+        changeSlide();
+      }
+    })
+
+    // 鼠标移入暂停轮播，移出继续
+    document.querySelector('.banner').onmouseenter = () => clearInterval(timer);
+    document.querySelector('.banner').onmouseleave = () => {
+      clearInterval(timer);
+      setInterval(autoPlay, 3000);
+    }
+  </script>
+  <div class="tour-card-wrap">
+        <!-- 跟团游 -->
+      <a href="#" class="tour-card">
+       <img class="tour-card-bg" src="https://dimg04.c-ctrip.com/images/0301h12000av6lbzz743C.jpg" alt="跟团游">
+      </a>
+         <!-- 私家团 -->
+      <a href="#" class="tour-card"> 
+        <img class="tour-card-bg" src="https://dimg04.c-ctrip.com/images/0302o12000av6lk9oC73D.jpg" alt="私家团">
+      <!-- 自由行 -->
+       <a href="#" class="tour-card"> 
+        <img class="tour-card-bg" src="https://dimg04.c-ctrip.com/images/0305c12000av6lmz6E04C.jpg" alt="自由行">
+       </a>
+      <!-- 定制旅行 -->
+       <a href="#" class="tour-card"> 
+         <img class="tour-card-bg" src="https://dimg04.c-ctrip.com/images/0305w12000av6lsqs0176.jpg" alt="定制旅行">
+        </a>
+  </div>
+    <!-- 底部出游提醒 横向通栏 -->
+        <div class="travel-tips">
+             <span class="tips-big">
+                 <a href="#">
+                  <img src="https://dimg04.c-ctrip.com/images/0301712000210yyut64FF.jpg" alt="">
+                 </a>
+             </span>
+         </div>
+            <script>
+        // 卡片点击跳转
+        document.querySelectorAll('.tour-card').forEach(card => {
+            card.onclick = function(){
+                const link = this.dataset.url;
+                window.location.href = link;
+            }
+        })
+    </script>
+
+        </div>
+        <!-- bannerbox -->
+    </div>
+    <!-- dest container -->
+<div class="top-nav">
+    <div class="logo">周边当地游</div>
+    <div class="tab-wrap">
+        <div class="tab-item active" data-id="jingxuan">精选</div>
+        <div class="tab-item" data-id="luoyang">洛阳</div>
+        <div class="tab-item" data-id="kaifeng">开封</div>
+        <div class="tab-item" data-id="yuntaishan">云台山风景名胜区</div>
+        <div class="tab-item" data-id="xinxiang">新乡</div>
+        <div class="tab-item" data-id="songshan">嵩山风景名胜区</div>
+        <div class="tab-item" data-id="anyang">安阳</div>
+        <div class="tab-item" data-id="jiaozuo">焦作</div>
+        <div class="tab-item" data-id="changzhi">长治</div>
+        <div class="tab-item" data-id="jincheng">晋城</div>
+    </div>
+</div>
+
+<!-- 主内容 -->
+<div class="main-box">
+    <!-- 左侧侧边栏 -->
+    <div class="left-aside">
+    </div>
+
+    <!-- 右侧商品 -->
+    <div class="right-content">
+        <!-- 精选页面（第一张截图商品） -->
+        <div class="tab-content show " id="jingxuan">
+            <div class="goods-list">
+                <div class="goods-card">
+                    <a href="#"><img src="https://dimg04.c-ctrip.com/images/0300412000ljl3m5eC140_C_210_118_Q100.jpg" class="card-img" alt="云台山"/>
+                    <div class="card-title">河南云台山风景名胜区2日1晚跟团游·『云台叠翠』含门票景区...</div>
+                    <div class="card-price">¥350起</div></a>
+                    
+                </div>
+                <div class="goods-card">
+                    <a href="#"><img src="https://dimg04.c-ctrip.com/images/0582m12000m3bu9yt510F_C_210_118_Q100.jpg" class="card-img" alt="云台山"/>
+                    <div class="card-title">河南云台山2日1晚跟团游·【轻松畅玩】已含景区小交通60元/人 ...</div>
+                    <div class="card-price">¥295起</div></a>
+                    
+                </div>
+                <div class="goods-card">
+                    <a href="#"> <img class="card-img" src="https://dimg04.c-ctrip.com/images/010421200089wwif4F80F_C_210_118_Q100.jpg" alt="万仙山"/>
+                    <div class="card-title">河南万仙山景区+云台山风景名胜区2日1晚跟团游·『太行双山』...</div>
+                    <div class="card-price">¥619起</div></a>
+                   
+                </div>
+                <div class="goods-card">
+                    <a href="#">  <img src="https://dimg04.c-ctrip.com/images/300g0w000000kd6f1BB87_C_210_118_Q100.jpg"class="card-img" alt="云台山瀑布"/>
+                    <div class="card-title">河南云台山风景名胜区2日1晚跟团游·云台山两日游</div>
+                    <div class="card-price">¥329起</div></a>
+                  
+                </div>
+
+                <div class="goods-card">
+                    <a href="#"><img class="card-img" src="https://dimg04.c-ctrip.com/images/010191200087d7pid1736_C_210_118_Q100.jpg" alt="少林寺"/>
+                    <div class="card-title">郑州+少林寺+洛阳+龙门石窟+清明上河园+开封府3...</div>
+                    <div class="card-price">¥817起</div></a>
+                    
+                </div>
+                <div class="goods-card">
+                    <a href="#"><img src="https://dimg04.c-ctrip.com/images/0305s12000pqi9yly9004_C_210_118_Q100.jpg" class="card-img" alt="龙门石窟汉服"/>
+                    <div class="card-title">少林寺+洛阳+龙门石窟+开封清明上河园2日1晚跟...</div>
+                    <div class="card-price">¥650起</div></a>
+                    
+                </div>
+                <div class="goods-card">
+                    <a href="#"> <img class="card-img" src="https://dimg04.c-ctrip.com/images/100j0g0000007u0rfC93D_C_210_118_Q100.jpg" alt="郭亮村"/>
+                    
+                    <div class="card-title">郑州+万仙山+中华影视村-郭亮村3日2晚跟团游·【周末游·1天郑...</div>
+                    <div class="card-price">¥441起</div></a>
+                   
+                </div>
+                <div class="goods-card">
+                    <a href="#"> <img class="card-img" src="https://dimg04.c-ctrip.com/images/0HJ2t12000s7d0hto23B8_C_210_118_Q100.jpg" alt="开封夜景"/>
+                    <div class="card-title">河南郑州+洛阳+开封4日游·老君山15人团·3...</div>
+                    <div class="card-price">¥1699起</div></a>
+                   
+                </div>
+            </div>
+        </div>
+
+        <!-- 洛阳页面（第三张截图商品） -->
+        <div class="tab-content" id="luoyang">
+            <div class="goods-list">
+                <div class="goods-card">
+                    <img src="https://dimg04.c-ctrip.com/images/0585w12000ribabsr8BA8_C_210_118_Q100.jpg" class="card-img" alt="老君山"/>
+                    <div class="card-title">河南郑州+开封+洛阳+老君山景区6日5晚拼小团·携...</div>
+                    <div class="card-price">¥1983起</div>
+                </div>
+                <div class="goods-card">
+                    <img class="card-img" alt="开封古街"/>
+                    <div class="card-title">河南郑州+洛阳+开封4日3晚跟团游·老君山15人团·3...</div>
+                    <div class="card-price">¥1699起</div>
+                </div>
+                <div class="goods-card">
+                    <img src="https://dimg04.c-ctrip.com/images/0306e12000lxpbnyf3109_C_210_118_Q100.png" class="card-img" alt="洛阳汉服"/>
+                    <div class="card-title">河南郑州+云台山风景名胜区+开封+洛阳老君山景区...</div>
+                    <div class="card-price">¥2998起</div>
+                </div>
+                <div class="goods-card">
+                    <img class="card-img" alt="龙门石窟"/>
+                    <div class="card-title">河南郑州+洛阳+开封4日3晚拼小团·老君山8人封顶·...</div>
+                    <div class="card-price">¥1713起</div>
+                </div>
+
+                <div class="goods-card">
+                    <img class="card-img" alt="龙门大佛"/>
+                    <div class="card-title">河南郑州+开封+洛阳+清明上河园+老君山景区+少...</div>
+                    <div class="card-price">¥1757起</div>
+                </div>
+                <div class="goods-card">
+                    <img class="card-img" alt="古风汉服"/>
+                    <div class="card-title">河南郑州+洛阳+开封+老君山景区5日4晚跟团游·『...</div>
+                    <div class="card-price">¥2466起</div>
+                </div>
+                <div class="goods-card">
+                    <img src="https://dimg04.c-ctrip.com/images/300g0w000000kd6f1BB87_C_210_118_Q100.jpg" class="card-img" alt="云台山峡谷"/>
+                    <div class="card-title">河南郑州+洛阳+开封5日4晚跟团游·『暑期预售·自营...</div>
+                    <div class="card-price">¥2375起</div>
+                </div>
+                <div class="goods-card">
+                    <img class="card-img" alt="洛阳古城"/>
+                    <div class="card-title">河南洛阳+郑州+开封+景区+龙门石窟+少林...</div>
+                    <div class="card-price">¥2298起</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 其他空面板，自行填充商品 -->
+        <div class="tab-content" id="kaifeng">开封板块内容</div>
+        <div class="tab-content" id="yuntaishan">云台山板块内容</div>
+        <div class="tab-content" id="xinxiang">新乡板块内容</div>
+        <div class="tab-content" id="songshan">嵩山板块内容</div>
+        <div class="tab-content" id="anyang">安阳板块内容</div>
+        <div class="tab-content" id="jiaozuo">焦作板块内容</div>
+        <div class="tab-content" id="changzhi">长治板块内容</div>
+        <div class="tab-content" id="jincheng">晋城板块内容</div>
+    </div>
+</div>
+
+<script>
+// Tab切换逻辑
+{
+const tabs = document.querySelectorAll('.tab-item');
+const panels = document.querySelectorAll('.tab-content');
+tabs.forEach(tab=>{
+    tab.onclick = function(){
+        // 清除所有激活
+        tabs.forEach(item=>item.classList.remove('active'));
+        panels.forEach(p=>p.classList.remove('show'));
+        // 当前tab激活
+        this.classList.add('active');
+        let targetId = this.getAttribute('data-id');
+        document.getElementById(targetId).classList.add('show');
+    }
+}
+}
+</script>
+
+    <div class="top-nav2">
+    <div class="logo2">境内旅游</div>
+    <div class="tab-wrap2">
+        <div class="tab-item2 active" data-id="jingxuan">精选</div>
+        <div class="tab-item2" data-id="zhengzhou">郑州</div>
+        <div class="tab-item2" data-id="wulumuqi">乌鲁木齐</div>
+        <div class="tab-item2" data-id="hulunbuir">呼伦贝尔</div>
+        <div class="tab-item2" data-id="guilin">桂林</div>
+        <div class="tab-item2" data-id="xining">西宁</div>
+        <div class="tab-item2" data-id="sanya">三亚</div>
+        <div class="tab-item2" data-id="luoyang">洛阳</div>
+        <div class="tab-item2" data-id="beijing">北京</div>
+        <div class="tab-item2" data-id="jiuzhaigou">九寨沟</div>
+    </div>
+</div>
+
+<!-- 主内容 -->
+<div class="main-box2">
+    <!-- 左侧双侧边栏 -->
+    <div class="left-aside2">
+      
+    </div>
+
+    <!-- 右侧商品 -->
+    <div class="right-content2">
+        <!-- 精选页面 -->
+        <div class="tab-content2 show " id="jingxuan">
+            <div class="goods-list">
+                <div class="goods-card">
+                    <img src="https://dimg04.c-ctrip.com/images/0305g12000jb2ivss5320_C_480_280_Q100.jpg" class="card-img2" alt="老君山">
+                    <div class="card-title">河南郑州+开封+洛阳+老君山景区6日5晚拼小团·携程自营 | 8人小团 | 真纯玩 | 没有购物 | 假一罚十 | 行程轻松 | 不赶 | 携程四钻酒店 ...</div>
+                    <div class="card-price">¥1983起</div>
+                </div>
+                <div class="goods-card">
+                    <img class="card-img" alt="龙门石窟">
+                    <div class="card-title">河南郑州+洛阳+开封4日3晚拼小团·老君山8人封顶 ...</div>
+                    <div class="card-price">¥1713起</div>
+                </div>
+                <div class="goods-card">
+                    <img class="card-img" alt="开封演艺">
+                    <div class="card-title">河南郑州+洛阳+开封4日3晚跟团游·老君山15人团·3 ...</div>
+                    <div class="card-price">¥1699起</div>
+                </div>
+                <div class="goods-card">
+                    <img class="card-img" alt="文物石像">
+                    <div class="card-title">河南郑州+洛阳+开封6日5晚跟团游·8人封顶精品小 ...</div>
+                    <div class="card-price">¥1999起</div>
+                </div>
+
+                <div class="goods-card">
+                    <img class="card-img" alt="洛阳汉服">
+                    <div class="card-title">河南郑州+洛阳+开封+云台山风景名胜区5日4晚跟 ...</div>
+                    <div class="card-price">¥1886起</div>
+                </div>
+                <div class="goods-card">
+                    <img class="card-img" alt="老君山夜景">
+                    <div class="card-title">河南郑州+洛阳老君山景区5日4晚跟团游·15人小团·冬 ...</div>
+                    <div class="card-price">¥1959起</div>
+                </div>
+                <div class="goods-card">
+                    <img src="https://dimg04.c-ctrip.com/images/0305t12000moh29fgD278_C_210_118_Q100.jpg" class="card-img2" alt="洛阳夜景汉服">
+                    <div class="card-title2">新疆北疆+伊犁+赛里木湖+那拉提旅游风景区7日6晚跟团游</div>
+                    <div class="card-price2">¥7650/人起</div>
+                </div>
+                <div class="goods-card">
+                    <img src="https://dimg04.c-ctrip.com/images/0305u12000moh8i1uE8D6_C_210_118_Q100.jpg"class="card-img2" alt="">
+                    <div class="card-title2">新疆北疆+伊犁+赛里木湖+那拉提旅游风景区6日5晚跟团游</div>
+                    <div class="card-price2">¥6799/人起</div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <!-- 其他空面板 -->
+        <div class="tab-content2" id="zhengzhou">郑州板块内容</div>
+        <div class="tab-content2" id="wulumuqi">乌鲁木齐板块内容</div>
+        <div class="tab-content2" id="hulunbuir">呼伦贝尔板块内容</div>
+        <div class="tab-content2" id="guilin">桂林板块内容</div>
+        <div class="tab-content2" id="xining">西宁板块内容</div>
+        <div class="tab-content2" id="sanya">三亚板块内容</div>
+        <div class="tab-content2" id="beijing">北京板块内容</div>
+        <div class="tab-content2" id="jiuzhaigou">九寨沟板块内容</div>
+    </div>
+</div>
+
+<script>
+// Tab切换逻辑
+const tabs = document.querySelectorAll('.tab-item');
+const panels = document.querySelectorAll('.tab-content');
+tabs.forEach(tab=>{
+    tab.onclick = function(){
+        // 清除所有激活
+        tabs.forEach(item=>item.classList.remove('active'));
+        panels.forEach(p=>p.classList.remove('show'));
+        // 当前tab激活
+        this.classList.add('active');
+        let targetId = this.getAttribute('data-id');
+        document.getElementById(targetId).classList.add('show');
+    }
+})
+</script>
+
+<!-- 标题区 -->
+<div class="cooper-header">
+    <h2 class="cooper-title">目的地及景区合作</h2>
+    <div class="more-link">更多目的地及景区合作></div>
+</div>
+
+<!-- 图标网格 -->
+<div class="cooper-grid">
+    <!-- 第一行 -->
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0300o120003fzgpnc02A6.png" alt="美国">
+        </div>
+        <div class="cooper-name"><a href="#">美国</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0304k120003g062ciBA65.png" alt="阿布扎比">
+        </div>
+        <div class="cooper-name"><a href="#">阿布扎比</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0306b120003g08j8jDE05.png" alt="英国">
+        </div>
+        <div class="cooper-name"><a href="#">英国</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0302i120003g09se20F6C.png" alt="艾伯塔省旅游局">
+        </div>
+        <div class="cooper-name"><a href="#">艾伯塔省旅游局</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/03071120003g0cc0dFC78.png" alt="德国">
+        </div>
+        <div class="cooper-name"><a href="#">德国</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0301i120003g0eotz702F.png" alt="洛杉矶">
+        </div>
+        <div class="cooper-name"><a href="#">洛杉矶</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0301n120003g0glhb8674.png" alt="新加坡圣淘沙名胜世界">
+        </div>
+        <div class="cooper-name"><a href="#">新加坡圣淘沙名胜世界</a><br>名胜世界</div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0303x120003g0kfpi05A5.png" alt="新加坡樟宜机场">
+        </div>
+        <div class="cooper-name"><a href="#">新加坡樟宜机场</a></div>
+    </div>
+
+    <!-- 第二行 -->
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0306f120003g0lr3jE188.png" alt="加州">
+        </div>
+        <div class="cooper-name"><a href="#">加州</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0300i120003g0oc2r21B1.png" alt="新加坡">
+        </div>
+        <div class="cooper-name"><a href="#">新加坡</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0300w120003g0pvva29B4.png" alt="澳大利亚">
+        </div>
+        <div class="cooper-name"><a href="#">澳大利亚</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0301u120003g0rtkb5B1F.png" alt="新西兰">
+        </div>
+        <div class="cooper-name"><a href="#">新西兰</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0306o120003g0v6q70202.png" alt="旧金山">
+        </div>
+        <div class="cooper-name"><a href="#">旧金山</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0304h120003g0wfjh7EE7.png" alt="香港">
+        </div>
+        <div class="cooper-name"><a href="#">香港</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/03068120003g0yee28313.png" alt="拉斯维加斯">
+        </div>
+        <div class="cooper-name"><a href="#">拉斯维加斯</a></div>
+    </div>
+    <div class="cooper-item">
+        <div class="cooper-logo">
+            <img src="https://dimg04.c-ctrip.com/images/0306k120003g102kaCEB7.jpg" alt="卡塔尔">
+        </div>
+        <div class="cooper-name"><a href="#">卡塔尔</a></div>
+    </div>
+    </div>
+  </div>
+  <!-- container -->
+</body>
+</html>
